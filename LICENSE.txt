@@ -1,0 +1,53 @@
+Snap Inc. Non-Commercial License
+
+Copyright (c) 2025 Snap Inc. All rights reserved.
+
+=================================
+
+This sample code is made available by Snap Inc. for non-commercial, research purposes only.
+
+Non-commercial means not intended for or directed towards commercial advantage or monetary compensation. Research purposes mean solely for academic study, instruction, or non-commercial research, testing or validation.
+
+No commercial license, whether implied or otherwise, is granted in or to this sample code or any related patents, unless you have entered into a separate agreement with Snap Inc. for such rights.
+
+This sample code is provided as-is, without warranty of any kind, express or implied, including any warranties of merchantability, title, fitness for a particular purpose, non-infringement, or that the code is free of defects, errors or viruses. In no event will Snap Inc. be liable for any damages or losses of any kind arising from this sample code or your use thereof.
+
+Any redistribution of this sample code, including in binary form, must retain or reproduce this license text including all copyright notices, conditions and disclaimers.
+
+=================================
+
+Third-Party Software
+
+This sample code may require, link to or interact with the following third-party components, each of which is governed by its own respective license:
+
+- Pillow Copyright 2010-2025 by Jeffrey A. Clark and contributors. The Pillow project can be found at: https://github.com/python-pillow/Pillow. This software is licensed under the MIT-CMU License. A copy of the license can be found at: https://raw.githubusercontent.com/python-pillow/Pillow/main/LICENSE.
+- pytorch Copyright 2016-2025 Meta AI and the PyTorch Foundation. The pytorch project can be found at: https://github.com/pytorch/pytorch. This software is licensed under the BSD 3-Clause "New" or "Revised" License. A copy of the license can be found at: https://github.com/pytorch/pytorch/blob/master/LICENSE.
+- torchvision Copyright 2025 Facebook, Inc. and its affiliates. The torchvision project can be found at: https://github.com/pytorch/vision. This software is licensed under the BSD 3-Clause "New" or "Revised" License. A copy of the license can be found at: https://github.com/pytorch/vision/blob/main/LICENSE.
+- requests Copyright 2025 Kenneth Reitz. The requests project can be found at: https://github.com/psf/requests. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/psf/requests/blob/main/LICENSE.
+- xformers Copyright 2025 Facebook, Inc. The xformers project can be found at: https://github.com/facebookresearch/xformers. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/facebookresearch/xformers/blob/main/LICENSE.
+- tqdm Copyright 2025 tqdm contributors. The tqdm project can be found at: https://github.com/tqdm/tqdm. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/tqdm/tqdm/blob/master/LICENCE.
+- GitPython Copyright 2025 GitPython Developers. The GitPython project can be found at: https://github.com/gitpython-developers/GitPython. This software is licensed under the BSD 3-Clause License. A copy of the license can be found at: https://github.com/gitpython-developers/GitPython/blob/main/LICENSE.
+- gpustat Copyright 2025 Jongwook Choi. The gpustat project can be found at: https://github.com/wookayin/gpustat. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/wookayin/gpustat/blob/master/LICENSE.
+- hydra-core Copyright 2025 Omry Yadan. The hydra-core project can be found at: https://github.com/facebookresearch/hydra. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/facebookresearch/hydra/blob/master/LICENSE.
+- scipy Copyright 2001-2025 SciPy Developers. The scipy project can be found at: https://github.com/scipy/scipy. This software is licensed under the BSD 3-Clause License. A copy of the license can be found at: https://github.com/scipy/scipy/blob/main/LICENSE.txt.
+- einops Copyright 2025 Alex Rogozhnikov. The einops project can be found at: https://github.com/arogozhnikov/einops. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/arogozhnikov/einops/blob/master/LICENSE.
+- PyAv Copyright 2025 PyAV-Org. The PyAv project can be found at: https://github.com/PyAV-Org/PyAV. This software is licensed under the BSD 3-Clause "New" or "Revised" License. A copy of the license can be found at: https://github.com/PyAV-Org/PyAV/blob/main/LICENSE.txt.
+- ftfy Copyright 2013-2025 Robyn Speer. The ftfy project can be found at: https://github.com/LuminosoInsight/python-ftfy. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/LuminosoInsight/python-ftfy/blob/main/LICENSE.txt.
+- regex Copyright 2025 Matthew Barnett. The regex project can be found at: https://github.com/mrabarnett/mrab-regex. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/mrabarnett/mrab-regex/blob/master/LICENSE.
+- protobuf Copyright 2008-2025 Google LLC. The protobuf project can be found at: https://github.com/protocolbuffers/protobuf. This software is licensed under the BSD 3-Clause License. A copy of the license can be found at: https://github.com/protocolbuffers/protobuf/blob/main/LICENSE.
+- joblib Copyright 2008-2025 The joblib developers. The joblib project can be found at: https://github.com/joblib/joblib. This software is licensed under the BSD 3-Clause License. A copy of the license can be found at: https://github.com/joblib/joblib/blob/master/LICENSE.
+- wandb Copyright 2020-2025 Weights & Biases. The wandb project can be found at: https://github.com/wandb/wandb. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/wandb/wandb/blob/main/LICENSE.md.
+- termcolor Copyright 2008-2025 Konstantin Chugui. The termcolor project can be found at: https://github.com/termcolor/termcolor. This software is licensed under the BSD 3-Clause License. A copy of the license can be found at: https://github.com/termcolor/termcolor/blob/master/LICENSE.
+- matplotlib Copyright 2012-2025 The Matplotlib Development Team. The matplotlib project can be found at: https://github.com/matplotlib/matplotlib. This software is licensed under the BSD-style License. A copy of the license can be found at: https://github.com/matplotlib/matplotlib/blob/main/LICENSE/LICENSE.
+- click Copyright 2025 Pallets. The click project can be found at: https://github.com/pallets/click. This software is licensed under the BSD 3-Clause License. A copy of the license can be found at: https://github.com/pallets/click/blob/main/LICENSE.rst.
+- torchmetrics Copyright 2020-2025 Lightning AI. The torchmetrics project can be found at: https://github.com/Lightning-AI/torchmetrics. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/Lightning-AI/torchmetrics/blob/master/LICENSE.
+- compressai Copyright 2021-2025 InterDigital Communications, Inc. The compressai project can be found at: https://github.com/InterDigitalInc/CompressAI. This software is licensed under the BSD 3-Clause License. A copy of the license can be found at: https://github.com/InterDigitalInc/CompressAI/blob/master/LICENSE.
+- lpips Copyright 2025 lpips contributors. The lpips project can be found at: https://github.com/richzhang/PerceptualSimilarity. This software is licensed under the BSD 2-Clause "Simplified" License. A copy of the license can be found at: https://github.com/richzhang/PerceptualSimilarity/blob/master/LICENSE.
+- timm Copyright 2025 Ross Wightman. The timm project can be found at: https://github.com/huggingface/pytorch-image-models. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/huggingface/pytorch-image-models/blob/main/LICENSE.
+- CLIP Copyright 2025 OpenAI. The CLIP project can be found at: https://github.com/openai/CLIP.git. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/openai/CLIP/blob/main/LICENSE.
+- beartype Copyright 2025 Cecil Curry, et al. The beartype project can be found at: https://github.com/beartype/beartype. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/beartype/beartype/blob/main/LICENSE.
+- loguru Copyright 2025 Delgan. The loguru project can be found at: https://github.com/Delgan/loguru. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/Delgan/loguru/blob/master/LICENSE.
+- torch_dct Copyright 2017-2025 fatchord. The torch_dct project can be found at: https://github.com/fatchord/torch-dct. This software is licensed under the MIT License. A copy of the license can be found at: https://github.com/fatchord/torch-dct/blob/master/LICENSE.
+- fvcore Copyright 2020-2025 Facebook AI Research. The fvcore project can be found at: https://github.com/facebookresearch/fvcore. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/facebookresearch/fvcore/blob/master/LICENSE.
+- diffusers Copyright 2025 Hugging Face, Inc. The diffusers project can be found at: https://github.com/huggingface/diffusers. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/huggingface/diffusers/blob/main/LICENSE.
+- accelerate Copyright 2022-2025 The HuggingFace Inc. team. The accelerate project can be found at: https://github.com/huggingface/accelerate. This software is licensed under the Apache License, Version 2.0. A copy of the license can be found at: https://github.com/huggingface/accelerate/blob/main/LICENSE.
