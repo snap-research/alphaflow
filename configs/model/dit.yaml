@@ -1,0 +1,80 @@
+defaults:
+  - base.yaml
+  - _self_
+
+arch: dit
+timestep_in_context: false
+backbone_target_class: src.training.dit.DiT
+dataset_ids_count: 32 # Number of datasets we train on.
+use_class_conditioning_when_available: true
+use_captions_conditioning_when_available: true
+compile_blocks: false
+self_cond_probability: 0.9
+
+# Dimension of the input
+# input_size: [3, 36, 64]
+# The size of the input patch [frames, height, width]
+# The hidden dimension of the model
+dim: 512
+time_pe_type: sinusoidal
+mlp_ratio: 4 # Multiplier for the hidden dimension in the attention MLP.
+tokenizer:
+  resolution: [1, 2, 2] # Patch resolution of the data token.
+  dim: ${..dim}
+  target_class: src.training.video_tokenizers.DiTTokenizer
+
+num_heads: 8 # The number of heads to use in the attention.
+num_blocks: 16 # The amount of DiT blocks in the model
+checkpointing: true
+checkpointing_blocks: ~ # If we want to checkpoint only some block idx.
+context_channels: 1024 # The number of channels in the context information
+mappings_hid_dim: 4096
+summary_text_embeddings_channels: 1024 # The number of channels for the summary text
+use_video_image_conditioning: false
+use_dataset_id_conditioning: false
+use_resolution_conditioning: false
+use_framerate_conditioning: false
+use_self_conditioning: true # Should we provide the activations from previous diffusion steps?
+use_fused_modulation: false # Should we compute modulation for all the blocks at once?
+use_sincos_posenc: false # Should we use sine/cosine positional encoding?
+block:
+  qk_norm: true # Should we use qk normalization?
+  enable_flashattn: true # If true uses flash attention
+  enable_layernorm_kernel: false # If true enables fused layernorm implementation
+  linear_class: torch.nn.Linear
+  attn_kwargs:
+    window_size: 6144
+    center_window: true # If False, makes the window causal. If true, centers the attention window over the current query
+    window_attn_shape: ~ # Window attention shape for SWIN-like attention.
+    norm_per_head: false
+    split_qkv: false
+    use_rope: true
+    temperature: 1.0
+    num_sink_tokens: 0 # Number of sink tokens to use in the attention (per head).
+  xattn_kwargs:
+    split_qkv: false
+  gate_mlp_dropout_p: 0.0
+  norm_type: layer_norm # One of [layer_norm, dyt_norm]
+  dyt_alpha_init: 0.5
+
+random_upsample:
+  min: 1 # When randomly upsample, what's the minimum factor to use?
+  max: 1 # Randomly upsample the input max by this factor.
+  type: upsample # One of ["upsample", "posenc", "pixelshuffle"]
+  aftertok: false # Should we apply before or after tokenization?
+  kwargs:
+    mode: bilinear
+    align_corners: true
+
+long_residual_from_block_idx: ~ # The block index to use for the long residual connection.
+long_residual_to_block_idx_from_end: 0 # The block index to use for the long residual connection; non-negative integer.
+break_residual_block_idx: ~ # The block index to break the residual connection.
+
+optim: {lr: 0.0003}
+lr_scheduler: {final_lr: "${model.optim.lr}"} # Disabling the final LR
+
+# The value to use for gradient clipping
+# use_ema_lr_correction: true # Should we adapt EMA as the lr changes?
+grad_clip: {norm: 16}
+ema_halflife_steps: 6931 # Ema speed in steps st. beta^halflife = 0.5. The original DiT paper uses 6931, which corresponds to beta=0.9999
+ema_rampup_ratio: 0.05 # Initial Ema annealing parameter

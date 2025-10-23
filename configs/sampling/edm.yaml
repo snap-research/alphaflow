@@ -1,0 +1,19 @@
+defaults:
+  - base.yaml
+  - _self_
+
+name: edm
+sigma_min: 0.002 # Lowest noise level
+sigma_max: 80 # Highest noise level
+real_init: false # Should we initialize the trajectory with real data in the form of z = x_real + sigma_max * noise?
+# sigma_max: 320
+rho: 7 # Time step exponent
+S_churn: 0 # Stochasticity strength
+S_min: 0.05 # Stoch. min noise level
+S_max: 50.0 # Stoch. max noise level
+S_noise: 1.003 # Stoch. noise inflation
+num_steps: 18 # Number of sampling steps
+cfg:
+  scale: 1.0 # Classifier free guidance scale. 1.0 --- no cfg.
+  scale_decrease: false # Decrease CFG linearly with the number of steps.
+second_order: true

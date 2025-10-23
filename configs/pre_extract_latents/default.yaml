@@ -1,0 +1,14 @@
+autoencoder_desc: unnamed-autoencoder
+new_dataset_name: ${dataset.name}_${dataset.resolution_str}_${pre_extract_latents.autoencoder_desc}
+cmd:
+  _target_: infra.utils.construct_latents_extraction_cmd
+  no_preext_exp: ~
+  dst: ~
+  resolution: ${dataset.resolution}
+  hydra_args_str: ${hydra_args_str}
+  ae_batch_gpu: ~
+  kwargs: {} # Any extra kwargs to pass to the extraction script.
+
+  # Should we not actually run this command? It's useful to skip it to save ~20 seconds
+  # of startup time when debugging and when the latents are already extracted.
+  ignore: false

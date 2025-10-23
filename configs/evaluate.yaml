@@ -1,0 +1,38 @@
+defaults:
+  - env: local
+  - sampling: ~
+  - ckpt: none
+  - dataset: imagenet
+  - dataset@gen_dataset: imagenet # We can also evaluate an already generated dataset of samples.
+  - _self_ # (needed for Hydra 1.1 to avoid warnings)
+
+# Logging options
+verbose: true
+metrics: [fid50k_full,dinofid50k_full,fcd50k_full] # Quality metrics
+save_path: ~
+
+has_raw_captions: false # Whether the gen dataset has raw captions.
+
+# Inference options
+batch_size: 4
+detector_batch_gpu: 64
+allow_tf32: false
+save_partial_stats_freq: ~
+cudnn_benchmark: true # Should we use cudnn benchmark? (can slow down the first iteration --- for some models, a lot)
+model_kwargs: {} # Additional inference model kwargs.
+
+# Instead of the checkpoint, use a dataset of fake images.
+# When doing so, we also need to specify experiment_cfg.path so that we can get the base dataset parameters from...
+# TODO: we can possibly specify a dataset in defaults instead.
+experiment_cfg: {path: ~, overrides: {}}
+
+dataset:
+  batch_size: 256
+  use_val_data_for_eval_stream: false
+
+gen_dataset:
+  drop_last: false
+  batch_gpu: 4
+  use_val_data_for_eval_stream: false
+  label_shape: []
+  metadata_ext: ~

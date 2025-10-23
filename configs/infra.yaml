@@ -1,0 +1,52 @@
+num_gpus: 8
+num_nodes: 1
+print_only: false
+ignore_uncommited_changes: false
+overwrite: false
+quiet_launch: false
+direct_launch: false # If true, runs the train(...) function directly instead of using torchrun.
+init_debugger: false
+
+git_hash: {_target_: infra.utils.get_git_hash}
+git_uncommited_changes_desc: {_target_: infra.utils.get_git_uncommited_changes_desc}
+desc: no-spec
+experiment_name: ${dataset.name}_${model.arch_short}_${desc}-${git_hash}${git_uncommited_changes_desc}
+experiments_dir: ${env.project_path}/experiments
+experiment_id_str:
+  _target_: infra.utils.get_next_experiment_id_str
+  experiments_dir: ${experiments_dir}
+  max_allowed_id: ${env.max_experiment_id}
+experiment_name_full: ${experiment_id_str}-${experiment_name}
+experiment_name_short: ${experiment_id_str}-${dataset.name}-${model.arch_short}-${git_hash}
+experiment_dir: ${experiments_dir}/${experiment_name_full}
+training_cmd_save_path: ${experiment_dir}/training_cmd.sh
+cfg_save_path: ${experiment_dir}/experiment_config.yaml
+output_dir: ${experiment_dir}/output # Where to save the checkpoints/logs/images/etc
+max_restarts: 2 # --max-restarts option for torchrun
+standalone: false # --standalone flag for torchrun.
+dist_timeout_seconds: 1200 # timeout for torch.distributed.init_process_group.
+profiling:
+  enabled: false
+  logs_dir: ${experiment_dir}/profiling_logs
+  trace_all_ranks: false
+
+hydra_args_str: hydra.run.dir=${experiment_dir} hydra.output_subdir=null hydra/job_logging=disabled hydra/hydra_logging=disabled
+
+wandb:
+  enabled: true
+  project: alphaflow
+  log_ema_stats: false
+  tags: []
+  distributed: false # Should we do wandb logging in each rank?
+  dir: ${env.wandb_parent_dir} # Where to save the wandb logs. If not specified, uses wandb's default of `./wandb`.
+  env_args: ${env.wandb_env_args}
+  env_args_str:
+    _target_: infra.utils.cfg_to_args_str
+    cfg: ${wandb.env_args}
+    use_dashes: false
+
+# Some debugging flags.
+debug_run: false # Is the run just local for debugging purposes?
+debug_no_freqs: false # For a debug run, a convenient way to disable all the logging.
+debug_no_freqs_allow: [] # An allow list of freqs to keep even if debug_no_freqs is set.
+debug_run_rename: true

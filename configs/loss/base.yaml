@@ -1,0 +1,79 @@
+defaults:
+  - ../ckpt/base@teacher.ckpt
+
+target: ~ # To be defined in the inheriting config.
+model: ${model} # Link to the parameters of the model.
+sampling: ${sampling} # Link to the sampling parameters.
+patch_overflow_tolerance: 0.0 # How much overflow is allowed in bounding context patch? Useful to set it to a bit larger value to help with the train/test mismatch.
+kl_weight: 0.0 # KL loss for the latents (if VAE-based model).
+kl_weight_schedule: [] # A list of the form [(iteration<int>, value<float>)]. Not compatible with kl_weight.
+kl_weight_relative: false
+kl_weight_anneal_steps: ~ # Number of steps to anneal the KL weight over.
+entropy_weight: 0.0 # Entropy loss for the latents (if VAE-based model).
+
+# Losses for single-step reconstruction (used by AE or diffusion-AE, but could also be used for distillation I guess).
+use_single_step_denoising: false # Disabled by default.
+denoising_loss_weight: 1.0 # To balance the main denoising loss.
+mse_loss: {weight: 0.0} # Shared weight of the MSE loss.
+mae_loss: {weight: 0.0} # Shared weight of the MAE loss.
+perceptual_loss:
+  weight: 0.0 # Shared weight of the perceptual loss.
+  scales: [1.0, 0.5, 0.25]
+  weights: [1, 1, 1, 1, 1]
+  replace_maxpool_with_avgpool: false
+  downsample_to_native: false
+perceptual_loss_alex:
+  weight: 0.0 # Shared weight of the AlexNet LPIPS loss.
+  downsample_to_native: false
+  downsample_tiled: false
+  num_first_layers: ~ # Up to 5.
+perceptual_loss_vgg:
+  weight: 0.0 # Shared weight of the VGG LPIPS loss.
+  downsample_to_native: false
+  downsample_tiled: false
+  num_first_layers: ~ # Up to 5.
+perceptual_loss_squeeze:
+  weight: 0.0 # Shared weight of the VGG LPIPS loss.
+  downsample_to_native: false
+  downsample_tiled: false
+  num_first_layers: ~ # Up to 5.
+pseudo_huber_loss:
+  weight: 0.0 # Shared weight of the pseudo huber loss.
+
+  # `c` coef from the "Improved Techniques for Training Consistency Models"
+  breadth_coef:
+    _target_: infra.utils.compute_breadth_coef
+    scale: 0.00054
+    resolution: ${dataset.resolution}
+img_grad_loss: {weight: 0.0} # Shared weight of the MAE loss.
+freq2d_loss: {weight: 0.0} # Shared weight of the 2D frequency loss.
+freq3d_loss: {weight: 0.0} # Shared weight of the 3D frequency loss.
+random_conv_l2_loss:
+  weight: 0.0
+  patch_size: 8
+  embed_dim: 32
+
+video_random_conv_l2_loss:
+  weight: 0.0
+  patch_size: 8
+  embed_dim: 32
+
+# Sometimes, we train with extra regularizations (e.g., KL loss). Should we apply our general denoising loss weighting to it?
+apply_denoising_loss_weight_to_reg: false
+
+teacher:
+  weights:
+    all_acts: 0.0
+    latents: 0.0
+    latents_dist_mean: 0.0
+    latents_dist_logvar: 0.0
+    videos: 0.0
+  weight_anneal_steps: 0 # Annealing steps for the teacher weights.
+  selected_modules: ~
+  cut_grad: false
+  swap_teacher_prob: 0.0
+  teacher_act_std: 0.0
+  loss_type: mse
+
+# Do we have global noise level per video or per pixel?
+per_pixel_noise_level: false

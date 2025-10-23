@@ -1,0 +1,4 @@
+class_name: src.training.lr_schedulers.create_composite_lr_scheduler
+num_warmup_steps: 10_000 # As in RIN
+final_lr: 0.00001 # Scale down to 0.00001 from 10k to `training.max_steps` iterations.
+max_steps: ${training.max_steps}

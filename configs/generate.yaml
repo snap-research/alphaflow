@@ -1,0 +1,60 @@
+defaults:
+  - env/base.yaml
+  - env: local
+  - sampling: ~
+  - ckpt: base
+  - dataset: ~
+  - _self_ # (needed for Hydra 1.1 to avoid warnings)
+
+# Randomness options
+seed: 1 # Random seed to fix non-generation randomness
+seeds: 1-32 # You can optionally override the `seed` argument by specifying seeds manually.
+classes: ~
+# grid_num_rows: 1 # Should we save images as a grid? If 1, then we save images one by one.
+
+# Inference options
+batch_size: 1 # Maximum batch size
+save_traj_len: 1 # Should we save the full trajectory or just last samples? If 1, then we return only the last value.
+save_traj_step_idx: ~ # Should we save the trajectory for some particular step idx?
+use_val_videos: true # Should we use validation videos for sampling?
+allow_tf32: true
+cudnn_benchmark: false # Sometimes, the first iteration with benchmarking is too slow or OOM with this flag.
+overwrite_fps: ~ # If not null, then use the provided FPS for conditional generation.
+overwrite_dataset_id: ~ # If not null, then use the provided dataset_id for conditional generation.
+overwrite_video_flag: ~ # If not null, then use the provided video_flag for conditional generation.
+overwrite_resolution: ~ # If not null, then use the provided resolution for conditional generation.
+use_gt_labels: false # Use the GT labels from the dataset?
+new_dataset_shuffle_seed: ~ # Random seed for cfg.training.seed which is used to shuffle the data (among other things).
+text_prompts_path: ~ # Path to the text prompts file.
+text_embs_path: ~ # Path to the already computed text embeddings.
+repeat_prompt: 1 # How many times to repeat the text prompt?
+
+overwrite_num_frames: ~ # If not null, then use the provided number of frames for conditional generation.
+
+# Logging options
+verbose: true
+output_dir: ~ # Where to save the output?
+save_gt: false # Should we save ground-truth videos?
+save_latents_num_samples: 0 # Should we save any latents? (in a separate data for-loop)
+save_latents_prefix: ~ # Prefix for the latents file.
+skip_if_exists: false # Skip the generation if the output already exists.
+
+profiling:
+  enabled: false
+  logs_dir: ${output_dir}-profiling
+  trace_all_ranks: false
+
+# Some infrastructure-related running options
+distributed: true # Would we need to initialze the distributed PyTorch backend?
+
+# Saving options
+save_opts:
+  crf: 22 # What crf to use while saving videos?
+  pix_fmt: rgb24
+
+# Hugging Face cache dir
+hf_cache_dir: ${env.cache_dir}/huggingface/hub
+model_kwargs: {} # Additional inference model kwargs.
+
+# Data settings.
+selected_stream: ~ # By default, we use the first stream of the dataset. If not null, then we'll find the stream with the given name.

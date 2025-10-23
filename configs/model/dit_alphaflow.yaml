@@ -1,0 +1,14 @@
+defaults:
+  - dit.yaml
+  - _self_
+
+backbone_target_class: src.training.dit.SiT
+target_class: src.training.networks.Diffusion
+block:
+  enable_flashattn: False # If true uses flash attention
+context_channels: 0
+self_cond_probability: 0.0
+label_dropout: 0.0
+
+arch_type: SiT
+precond: alphaflow

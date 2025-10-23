@@ -1,0 +1,12 @@
+defaults:
+  - base.yaml
+  - _self_
+
+name: recflow
+target: src.training.loss.RecFlowLoss
+time_sampling:
+  location: 0.0
+  scale: 1.0
+  eps: 0.001
+
+  custom_t_steps: ~ # We can scale from custom t_steps if we wish so. Useful for distillation.

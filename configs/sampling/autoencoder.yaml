@@ -1,0 +1,10 @@
+defaults:
+  - edm.yaml
+  - _self_
+
+name: autoencoder
+sigma_min: 0.0
+sigma_max: 0.0
+num_steps: 1
+second_order: false
+real_init: true

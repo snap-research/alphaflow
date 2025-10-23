@@ -1,0 +1,16 @@
+# Default config for checkpoints.
+snapshot_path: ~ # Network pickle filename
+snapshot_dir: ~ # Network pickles directory
+snapshot_exp_id: ~ # Experiment ID for the snapshot
+selection_metric: ~ # Which metric to use when selecting the best ckpt?
+snapshot_iter: ~ # Loading a snapshot at a specific iteration.
+load_state: true # Should we actually load the weights or use the default init?
+exp_cfg_path: ~ # Path to the experiment_config.yaml of a given experiment (needed somtimes).
+use_ema: true # Should we use the EMA weights?
+fsdp: false
+convert_params_to_buffers: false
+cfg_overwrites: {}
+allow_missing_keys: false
+allow_unexpected_keys: false
+graceful_termination_when_missing: false
+experiments_dir: experiments # Where all the experiments are stored.

@@ -1,0 +1,8 @@
+defaults:
+  - dit_alphaflow.yaml
+  - base-lgm.yaml
+  - _self_
+
+target_class: src.training.networks.LatentDiffusion
+
+

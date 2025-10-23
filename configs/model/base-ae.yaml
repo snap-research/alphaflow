@@ -1,0 +1,19 @@
+freeze_encoder: false
+
+latent_noise_std: 0.0
+is_masked_ae: false
+use_kl: false
+is_vae: false
+is_autoencoder: true
+is_diffusion: false
+precond: xpred
+self_cond_probability: 0.0
+repeat_img_temporally: 1
+use_x_cond: true
+use_mean_latents_in_eval: false
+sigma_data: 1.0
+ema_halflife_steps: 5000
+
+# How many samples to use during training (per gpu) to estimate the statistics of the latent codes for logging?
+num_samples_to_estimate_stats_for_logging: 256
+log_latent_stats: true

@@ -1,0 +1,165 @@
+alphaflow-256x256-b256-ditb2-sdvae-base-folder:
+  model: dit_alphaflow_ldm
+  loss: alphaflow
+  dataset: imagenet
+  sampling: recflow
+  env: local
+  pre_extract_latents: none
+  overrides:
+    quiet_launch: true
+    num_nodes: 1
+    wandb: {tags: ["alphaflow-latentspace"]}
+    training:
+      metrics: [joint_image_fd512_full]
+      metrics_rare: [joint_image_fd50k_full]
+      metrics_extra_sampling_cfg_overwrites:
+        +NFE_2_ode_sampling:
+          num_steps: 2
+        +NFE_2_consistency_sampling:
+          num_steps: 2
+          enable_consistency_sampling: true
+      max_steps: 400_000
+      freqs: {snapshot_latest: 1000, snapshot: 100000, loss_per_sigma: ~, loss_val: ~}
+      traj_len_for_vis_gen: 1
+      num_vis_samples: 16 # Should be a number divided by 8
+      dp: {strategy: ddp}
+    sampling:
+      num_steps: 1
+      sigma_noise: 1.0
+      enable_trajectory_sampling: true
+      enable_consistency_sampling: false
+    dataset:
+      name: imagenet_folder
+      resolution: [1,256,256]
+      batch_gpu: 32
+      batch_size: 256
+      test_batch_gpu: 1
+      use_val_data_for_eval_stream: false
+      print_traceback: true
+      print_exceptions: true
+    model:
+      optim:
+        class_name: torch.optim.Adam
+        betas: [0.9, 0.95]
+        weight_decay: 0.0
+        lr: 0.0001
+      dropout: 0.0
+      use_ema: true
+      checkpointing: false
+      num_blocks: 12
+      dim: 768
+      num_heads: 12
+      sigma_data: 1.0
+      use_fused_modulation: false
+      tokenizer: {resolution: [1,2,2]}
+      lr_scheduler:
+        final_lr: 0.0001
+      autoencoder_ckpt:
+        snapshot_path: ${env.project_path}/snapshots/sd_vae_ft_ema.pt
+        convert_params_to_buffers: false
+
+alphaflow-latentspace-sdvae-prextraction-folder:
+  _inherit_: alphaflow-256x256-b256-ditb2-sdvae-base-folder
+  pre_extract_latents: default
+  overrides:
+    pre_extract_latents:
+      autoencoder_desc: sd_vae_fixed
+      cmd:
+        dst: ${env.folder_datasets_path}/${pre_extract_latents.new_dataset_name}/
+        ignore: false
+        ae_batch_gpu: 32
+        no_preext_exp: alphaflow-256x256-b256-ditb2-sdvae-base-folder
+        kwargs: {+save_metadata: true}
+    dataset:
+      data_type: image_latent
+      src: ${env.folder_datasets_path}/${pre_extract_latents.new_dataset_name}/train/
+      src_val: ${env.folder_datasets_path}/${pre_extract_latents.new_dataset_name}/val/
+      +eval_stream:
+        data_type: image
+        src: ${env.folder_datasets_path}/imagenet/train/
+    model:
+      use_precomputed_latents: true
+
+# Base model
+#----------------------------------------------------------------------------
+
+alphaflow-latentspace-B-2:
+  _inherit_: alphaflow-latentspace-sdvae-prextraction-folder
+  overrides:
+    loss: {cfg_params: {omega: 1.0, t_min: 0.0, t_max: 1.0, kappa: 0.0}}
+    model: {num_blocks: 12, dim: 768, num_heads: 12, label_dropout: 0.0, tokenizer: {resolution: [1,2,2]}}
+    training: {max_steps: 400000, freqs: {snapshot: 100000}, freqs: {param_stats: null}}
+
+alphaflow-latentspace-B-4:
+  _inherit_: alphaflow-latentspace-sdvae-prextraction-folder
+  overrides:
+    loss: {cfg_params: {omega: 1.0, t_min: 0.0, t_max: 1.0, kappa: 0.0}}
+    model: {num_blocks: 12, dim: 768, num_heads: 12, label_dropout: 0.0, tokenizer: {resolution: [1,4,4]}}
+    training: {max_steps: 400000, freqs: {snapshot: 100000}, freqs: {param_stats: null}}
+
+alphaflow-latentspace-B-2-cfg-training:
+  _inherit_: alphaflow-latentspace-sdvae-prextraction-folder
+  overrides:
+    loss: {cfg_params: {omega: 1.0, t_min: 0.0, t_max: 1.0, kappa: 0.5}}
+    model: {num_blocks: 12, dim: 768, num_heads: 12, label_dropout: 0.1, tokenizer: {resolution: [1,2,2]}}
+    training: {max_steps: 1200000, freqs: {snapshot: 100000}, freqs: {param_stats: null}}
+
+alphaflow-latentspace-L-2-cfg-training:
+  _inherit_: alphaflow-latentspace-sdvae-prextraction-folder
+  overrides:
+    loss: {cfg_params: {omega: 0.2, t_min: 0.0, t_max: 0.8, kappa: 0.92}}
+    model: {num_blocks: 24, dim: 1024, num_heads: 16, label_dropout: 0.1, tokenizer: {resolution: [1,2,2]}}
+    training: {max_steps: 1200000, freqs: {snapshot: 100000}, freqs: {param_stats: null}}
+
+alphaflow-latentspace-XL-2-cfg-training:
+  _inherit_: alphaflow-latentspace-sdvae-prextraction-folder
+  overrides:
+    loss: {cfg_params: {omega: 0.2, t_min: 0.0, t_max: 0.75, kappa: 0.92}}
+    model: {num_blocks: 28, dim: 1152, num_heads: 16, label_dropout: 0.1, tokenizer: {resolution: [1,2,2]}}
+    training: {max_steps: 1200000, freqs: {snapshot: 100000}, freqs: {param_stats: null}}
+
+# Flow matching
+#----------------------------------------------------------------------------
+
+alphaflow-flowmatching-latentspace-B-2:
+  _inherit_: alphaflow-latentspace-B-2
+  overrides:
+    sampling: {num_steps: 80, enable_trajectory_sampling: false, enable_consistency_sampling: false}
+    training: {freqs: {metrics_rare: 100_000}}
+    loss: {alpha: {scheduler: constant, initial_value: 0.0}, ratio_fm: {scheduler: constant, initial_value: 1.0}}
+
+# MeanFlow
+#----------------------------------------------------------------------------
+
+alphaflow-meanflow-latentspace-B-2:
+  _inherit_: alphaflow-latentspace-B-2
+  overrides:
+    loss: {alpha: {scheduler: constant, initial_value: 0.0}, ratio_fm: {scheduler: constant, initial_value: 0.75}}
+
+alphaflow-meanflow-latentspace-B-2-cfg-training:
+  _inherit_: alphaflow-latentspace-B-2-cfg-training
+  overrides:
+    loss: {ratio_fm: {scheduler: constant, initial_value: 0.5}, alpha: {scheduler: constant, initial_value: 0.0}, clamp_utgt: 4.0}
+
+alphaflow-meanflow-latentspace-XL-2-cfg-training:
+  _inherit_: alphaflow-latentspace-XL-2-cfg-training
+  overrides:
+    loss: {ratio_fm: {scheduler: constant, initial_value: 0.5}, alpha: {scheduler: constant, initial_value: 0.0}, clamp_utgt: 4.0}
+
+# AlphaFlow
+#----------------------------------------------------------------------------
+
+alphaflow-sigmoid-latentspace-B-2:
+  _inherit_: alphaflow-latentspace-B-2
+  overrides:
+    loss: {alpha: {scheduler: sigmoid, initial_value: 1.0, end_value: 0, change_init_steps: 0, change_end_steps: 400000, clamp_value: 0.005, gamma: 25.0}, ratio_fm: {scheduler: constant, initial_value: 0.5}}
+
+alphaflow-sigmoid-latentspace-B-2-cfg-training:
+  _inherit_: alphaflow-latentspace-B-2-cfg-training
+  overrides:
+    loss: {alpha: {scheduler: sigmoid, initial_value: 1.0, end_value: 0, change_init_steps: 0, change_end_steps: 1200000, clamp_value: 0.005, gamma: 25.0}, ratio_fm: {scheduler: constant, initial_value: 0.25}}
+
+alphaflow-sigmoid-latentspace-XL-2-cfg-training:
+  _inherit_: alphaflow-latentspace-XL-2-cfg-training
+  overrides:
+    loss: {ratio_fm: {scheduler: constant, initial_value: 0.5}, alpha: {scheduler: sigmoid, initial_value: 1.0, end_value: 0, change_init_steps: 600000, change_end_steps: 1000000, clamp_value: 0.005, gamma: 25.0}, clamp_utgt: 4.0}

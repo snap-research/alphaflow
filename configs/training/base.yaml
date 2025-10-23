@@ -1,0 +1,61 @@
+# Resumal settings.
+resume:
+  on_start_ckpt_path: ~ # Resume from a given snapshot.
+  allow_missing_extra_state_on_start: true # Should we require the full state to be present when starting from a snapshot?
+  whole_state: true # Should we resume the whole state or just the main network?
+  allow_missing_optim: false # Should we allow the optimizer/grad_scaler/lr_scheduler to be missing?
+  allow_missing_ema: false # Should we allow the EMA to be missing?
+  allow_missing_keys: false # Should we allow missing keys in the state dict when resuming?
+  allow_unexpected_keys: false # Should we allow unexpected (new) keys in the state dict when resuming?
+  reinit_new_params: false # Set the weights of non-matched params to zero?
+  resize_tokens_posenc: false # A hack for loading old FIT checkpoints.
+
+# Some miscellaneous model state settings.
+force_single_group_params: false # A legacy flag to enable different weight decay rate for different types of parameters.
+save_init: false # Save the initial model snapshot before training? Useful for debugging.
+
+dp:
+  strategy: fsdp # One of [null, 'ddp', 'fsdp', 'fsdp2']
+  fsdp_strategy: full_shard # One of [full_shard, shard_grad_op, no_shard, hybrid_shard]
+  ddp_find_unused_parameters: false # `find_unused_parameters` argument for DDP
+  fsdp_min_num_params: 100_000_000_000
+
+# Misc settings.
+metrics: [joint_fd512_full,clip_score512,reconstruction128] # Quality metrics
+metrics_rare: [joint_fd512_full,clip_score2048,reconstruction2048] # Quality metrics for rare evaluation (since they are expensive to compute)
+metrics_final: [] # Quality metrics to compute at the very end of training.
+main_metric: __pick_first__ # Takes the first metric among `metrics` as the main one to compute the best checkpoint
+metrics_extra_sampling_cfg_overwrites: {} # A dict of suffix to overwrite evaluate sampling methods
+
+max_steps: 600_000 # Total number of training iterations.
+
+# Some logging/visualization settings.
+seconds_per_tick: ~ # Print tick stats every N seconds
+steps_per_tick: 500 # How many steps per tick should we do?
+num_samples_for_val_loss: 1024 # Should we log the loss values on the test set?
+num_samples_for_per_sigma_loss: 128
+num_log_sigmas: 11 # How many noise quantiles to use for the per-sigma loss?
+num_vis_samples: ~ # How many samples to generate for visualization? (default: auto)
+traj_len_for_vis_gen: ~ # The trajectory length to generate for visualization?
+
+log_loss_across_gpus: true # Gather loss values across GPUs? (incurs an additional communication sync)
+log_teacher_params_diff: false # For teacher distillation, should we plot the parameter differences between the teacher and student?
+
+freqs:
+  snapshot: 10_000 # How often to save snapshots
+  snapshot_latest: 500 # How often to save the latest snapshot
+  save_samples: 5000 # How often to save samples?
+  loss_train_commit: 10 # How often to log batch metrics? (in terms of iterations)
+  loss_per_sigma: 5_000 # How often to save losses per sigma?
+  loss_val: 5_000 # How often to save val losses?
+  metrics: 10_000 # How often to compute metrics (in terms of ticks)
+  metrics_rare: 50_000 # How often to compute rare metrics (in terms of ticks)
+  param_stats: 1_000 # How often to log parameter statistics? It's not that slow to log, so doing it more frequently.
+  ctrl_check: 10 # How often (in terms of iterations) should we check state.json for control signals.
+
+seed: 1 # Random seed
+
+# Some hardware optimization parameters.
+cudnn_benchmark: true # Enable cuDNN benchmarking
+allow_tf32: true
+grad_nan_to_num: true

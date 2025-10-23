@@ -1,0 +1,11 @@
+defaults:
+  - env: local
+  - model: dit
+  - loss: alphaflow
+  - training: base
+  - sampling: recflow
+  - dataset: imagenet
+  - infra.yaml # TODO: merge with env?
+  - pre_extract_latents: none # Some config for latents pre-extraction before training.
+
+  - _self_ # (needed for Hydra 1.1 to avoid warnings)

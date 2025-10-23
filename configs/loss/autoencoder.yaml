@@ -1,0 +1,32 @@
+defaults:
+  - base.yaml
+  - _self_
+
+name: autoencoder
+target: src.training.loss.AutoEncoderLoss
+P_mean: -.inf
+P_std: 0.0
+kl_weight: 1.0
+perceptual_loss: {weight: 1.0}
+
+scale_equiv_reg:
+  weight: 0.0
+  scale_factors: [] # Smth like [0.5], [0.5, 0.25], etc. Scale factor for downsampling.
+  temporal_scale_factors: [] # For the temporal axis.
+  resample_strategy: mean # What downsampling strategy to use? `mean` or `bil`?
+
+  cut_dct2d_high_freqs:
+    max_cut_ratio: 0.0
+    block_size: ~ # If None, would use the GCD(latent_height, latent_width) latent spatial size.
+    zigzag: false # Should we cut in zigzag order or block order?
+
+  ignore_lpips: false
+
+high_freq_reg:
+  weight: 0.0
+  power: 2.0
+  block_size: ~
+
+dec_lipschitz_reg:
+  r1_weight: 0.0
+

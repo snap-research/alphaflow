@@ -1,0 +1,18 @@
+defaults:
+  - ../ckpt/base@autoencoder_ckpt
+
+is_lgm: true
+use_precomputed_latents: false
+latent_channel_break: ~
+autoencoder_ignore_labels: false
+sigma_data: 1.0 # Setting to 1.0 since we would normalize AE latents to unit std.
+
+autoencoder_ckpt:
+  # Snapshot path for old DiT: /nfs/iskorokhodov/sdm/snapshots/0127-joint-multires_magvit_magvit-base-512-asymmetric-16base-wimages-16down-8tdown-32ch-disc-kl01-00210000.pt
+  # For external autoencoders
+  external: false
+
+num_samples_to_estimate_stats: 2048
+latents_mean: ~ # Use some mean for the latents. If not specified, it will be inferred from the data.
+latents_std: ~ # Use some std for the latents. If not specified, it will be inferred from the data.
+spatio_temporal_latent_stats: true

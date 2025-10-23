@@ -1,0 +1,13 @@
+defaults:
+  - base.yaml
+  - _self_
+
+name: k700
+data_type: video
+label_shape: [700]
+src: ${env.folder_datasets_path}/kinetics-700/train/
+src_val: ${env.folder_datasets_path}/kinetics-700/val/
+s3_listdir_cache_dir: ~
+local_dir: ~
+metadata_ext: .meta.json
+replace_broken_samples_with_random: true

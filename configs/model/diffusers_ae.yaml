@@ -1,0 +1,28 @@
+defaults:
+  - base.yaml
+  - base-ae.yaml
+  - _self_
+
+arch: ~ # See the list of supported architectures in src/training/external/diffusers_ae.py
+pretrained: true # Should we use a pre-trained or a randomly initialized model.
+pretrained_lenient: false # If we want to alter the model, we can't use `pretrained` anymore due to mismatched stuff. But we can load as much as we can.
+pretrained_lenient_resume_kwargs: ~
+model_variant: ~ # An extra (optional) string specifier for the model variant.
+model_path: ~ # Custom model path (or use default)
+subfolder: ~ # Custom subfolder (or use default)
+target_class: src.training.networks.DiffusionAutoEncoder
+backbone_target_class: src.training.diffusers_ae.DiffusersAutoEncoderBackbone
+is_vae: true
+act_dtype: bfloat16
+is_temporal: true
+enc_split_input_size: ~
+dec_split_latent_size: ~
+sigma_data: 1.0
+use_grad_checkpointing: true
+config_overrides: ~ # If we train from scratch, we can override the config here.
+disable_fsdp_wrap: false
+wan_ae_patch_dec_pad_forwards: false
+
+extra_upsample: false
+freeze_non_up_dec_layers: false # Should we freeze the non-upsample decoder layers (by converting params to buffers).
+freeze_dec_modules_list: ~ # List of decoder modules to freeze.

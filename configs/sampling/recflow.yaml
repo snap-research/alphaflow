@@ -1,0 +1,15 @@
+defaults:
+  - base.yaml
+  - _self_
+
+name: recflow
+num_steps: 80
+eps: 0.0
+sigma_noise: 2.0 # Standard deviation of the noise.
+time_shifting: 1.0 # Test-time time shifting.
+cfg:
+  scale: 1.0
+
+  # CFG is only enabled for t in [t_min, t_max]
+  t_min: 0.0
+  t_max: 1.0

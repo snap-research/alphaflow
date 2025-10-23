@@ -1,0 +1,12 @@
+defaults:
+  - dit.yaml
+  - base-lgm.yaml
+  - _self_
+
+target_class: src.training.networks.LatentDiffusion
+self_cond_probability: 0.9
+precond: recflow
+num_blocks: 24 # For 11B: 32
+num_heads: 16 # For 11B: 32
+dim: 1024 # For 11B: 4096
+mappings_hid_dim: 4096

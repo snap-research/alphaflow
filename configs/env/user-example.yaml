@@ -1,0 +1,29 @@
+# This file contains custom settings for a user and is not supposed to be committed to the repository.
+user: hzhang11
+project_path: <your/project/path> # TODO: make `project_path: ${hydra:runtime.cwd}` work in the initialize + compose setting
+folder_datasets_path: ${env.project_path}/data # Where the non-sharded datasets are located locally.
+cache_dir: ${env.project_path}/.cache # Where to store cache for model weights for clip/huggingface/lpips/etc.
+dataset_stats_dir: ${env.project_path}/data/stats # Where the dataset statistics for FID/FVD are stored. Copy them for initialization.
+latents_stats_dir: ${env.project_path}/data/latents-stats # Where the latent statistics are computed.
+
+# A path to the installed conda environment directory.
+conda_env_dirname: env
+
+# A path to the global conda bin directory for conda initialization.
+conda_init_bin_path: <your/conda_bin/path>
+
+# Config for WANDB.
+wandb_parent_dir: ~ # By default, wandb writes to ./wandb (i.e., equivalent to `wandb_parent_dir='./'`), which can overload the NFS.
+wandb_env_args:
+  WANDB_API_KEY: ~
+  WANDB_USERNAME: ~
+  WANDB_BASE_URL: ~
+  WANDB_ENTITY: ~
+
+  WANDB_API_KEY_SPOOKEY_KEYNAME: ~
+  WANDB_USER_EMAIL: ~
+  WANDB_SILENT: true # Do not print the wandb login and error messages.
+
+# This setting is a bit tricky. The thing is that we run expreiments in separate clusters and sync them manually.
+# To avoid collisions, and to avoid syncing IDs after each experiment launch, we split them into ranges.
+max_experiment_id: ~

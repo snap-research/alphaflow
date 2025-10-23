@@ -1,0 +1,50 @@
+name: ~
+has_captions: false
+label_shape: []
+framerate: 12.0 # Valid only for video datasets.
+frame_seek_timeout_sec: 5.0 # Number of seconds to wait for a frame to be decoded.
+shuffle: true # Should we shuffle the train dataset?
+shuffle_seed: 42
+
+# Default parameters
+resolution: ~
+resolution_str:
+  _target_: infra.utils.get_resolution_str
+  resolution: ${..resolution}
+allow_shorter_videos: false # Raise an error if a video is shorter than the specified length.
+
+# A list of resolutions to randomly resize the video to (together with the probabilities). If not specified, always uses the original resolution.
+# Should be of the form: {resolution_str: probability}. Probabilities should sum to 1. Example: {1x128x128: 0.33, 1x256x256: 0.33, 1x512x512: 0.34}.
+random_resize: ~
+
+random_offset: true
+thread_type: ~ # For video decoding with pyav.
+
+# Should we print exceptions when loading samples?
+# Works only for caption-based datasets.
+print_exceptions: false
+print_traceback: false
+
+# Dataloading parameters.
+num_workers: 6 # DataLoader worker processes
+prefetch_factor: 3 # DataLoader prefetch factor
+predownload: 256
+persistent_workers: true
+drop_last: true # Whether to drop the last incomplete batch.
+
+batch_size: ~ # Total batch size. If not specified, it will be computed automatically.
+batch_gpu: ~
+num_accum_rounds: ~
+test_batch_gpu: 16 # Batch size at test time
+gen_batch_gpu: 2 # Batch size for visualization/metrics
+metrics_detector_batch_gpu: 32 # Batch size for the metrics detector. Setting it small due to that weird "Python frame" error in the dataloader.
+
+# Path where the data will be stored locally.
+local_dir: ${env.data_local_dir}
+
+num_loading_retries: 5 # Number of retries for loading a sample.
+
+# SDS dataset parameters.
+max_size: ~
+eval_stream: ~ # Stream to compute the metrics on. By default, would use either val or the main train stream.
+use_val_data_for_eval_stream: true

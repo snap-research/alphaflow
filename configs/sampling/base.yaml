@@ -1,0 +1,4 @@
+real_init: false
+custom_t_steps: ~ # Allows to define an array of custom t steps to use during inference.
+enable_trajectory_sampling: false # Use both current timestep and next timestep for network inference
+enable_consistency_sampling: false # Using consistency sampling for few-steps flow model

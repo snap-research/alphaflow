@@ -1,0 +1,7 @@
+defaults:
+  - train.yaml
+
+dst: ~ # Where to store the results?
+subset: ~
+tmp_dir: /lssd/tmp
+save_metadata: false

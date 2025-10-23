@@ -1,0 +1,58 @@
+# User-wise settings.
+defaults:
+  - user.yaml
+  - _self_
+
+conda_env_path: ${env.project_path}/${env.conda_env_dirname}
+python_bin: ${env.conda_env_path}/bin/python
+before_train_commands: []
+before_train_commands_common:
+  - export HYDRA_FULL_ERROR=1
+  - export TORCH_EXTENSIONS_DIR=/tmp/torch_extensions
+  - export NCCL_DEBUG=WARN # Set NCCL_DEBUG=WARN for less detailed logs, and NCCL_DEBUG=INFO for more detailed logs.
+  # - export CUDA_LAUNCH_BLOCKING=1
+  # - export CUDA_MEMCHECK=1
+  - export TORCH_NCCL_ASYNC_ERROR_HANDLING=1 # It should be automatically set to 1, but just to make sure...
+  - export OMP_NUM_THREADS=1 # Setting to 1 since it anyway sets it 1? TODO: should we overwrite the default behaviour?
+  # - export SAFE_GROUP_RANK=\${GROUP_RANK:-0} # We want to have nice run IDs for wandb, where we use the group ranks as suffixes.
+  # - export SAFE_RANK=\${RANK:-0} # We want to have nice run IDs for wandb, where we use the ranks as suffixes.
+
+  # These exports are copy-pasted from LSVG H100 jobs and are needed.
+  - export TORCH_NCCL_HEARTBEAT_TIMEOUT_SEC=1800
+  - export NCCL_SOCKET_IFNAME=eth
+  - export PYTHONUNBUFFERED=1
+  - export FI_EFA_FORK_SAFE=1
+  - export TORCH_NCCL_ASYNC_ERROR_HANDLING=1
+
+  # Seems like `torch.optim.lr_scheduler.CosineAnnealingLR` is passing the epoch to the scheduler step, which is deprecated.
+  - export PYTHONWARNINGS="ignore:EPOCH_DEPRECATION_WARNING"
+
+  # We should save torch models to our common cache dir, so that the model downloading is not stuck for a multi-node setup. TODO: why would it be?
+  - export TORCH_HOME=${env.cache_dir}/torch
+
+  # Huggingface cache dir, so that each node does not need to re-download the models on each launch.
+  - export HF_HOME=${env.cache_dir}/huggingface
+
+  # Prevent "core.*" files being dumped since they are un-analyzable and take up too much space.
+  - ulimit -c 0
+
+  # TODO: this shouldn't be there... Why do the script fails without it?
+  - git config --global --add safe.directory ${env.project_path}
+
+  # Those two due to this: https://stackoverflow.com/questions/65184937/fatal-python-error-init-fs-encoding-failed-to-get-the-python-codec-of-the-file
+  # We sometimes get a "<no Python frame>" error (e.g., gjs experiment)
+  # - unset PYTHONPATH
+  # - unset PYTHONHOME
+  - ${env.conda_env_path}/bin/gpustat
+objects_to_copy:
+  - ${env.project_path}/src
+  - ${env.project_path}/infra
+  - ${env.project_path}/configs
+  - ${env.project_path}/scripts
+extra_python_paths: [] # Is needed sometimes to run with external models.
+tmp_dir: /tmp
+data_local_dir: data
+symlinks_to_create:
+  - ${env.project_path}/data
+
+datasets_host: ~ # Must be provided

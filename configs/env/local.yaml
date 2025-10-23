@@ -1,0 +1,7 @@
+defaults:
+  - base.yaml
+  - _self_
+
+name: local
+local_disk_space: 500
+datasets_host: ~

@@ -1,0 +1,46 @@
+defaults:
+  - optim/adamw
+  - lr_scheduler/composite
+  - ../ckpt/none@autoencoder_ckpt
+
+arch: ~
+arch_short: ${.arch}
+precond: recflow # Preconditioning & loss function. One of ['vp', 've', 'edm'].
+target_class: src.training.networks.Diffusion
+sigma_data: 0.5
+ema_halflife_steps: 500 # EMA half-life in the number of steps.
+ema_rampup_ratio: 0.05 # EMA rampup ratio.
+ema_update_freq: 1 # Update on each step.
+dropout: 0.1 # Dropout probability. We train with small enough models...
+
+is_diffusion: true # Is it a model in the diffusion framework?
+is_autoregressive: false # Is it an autoregressive model?
+is_lgm: false # Is latent generative model?
+is_autoencoder: false # Is it an autoencoder?
+is_vae: false # Is it a VAE?
+
+# Parameters related to dtype/autocast.
+act_dtype: bfloat16 # One of ['float32', 'float16', 'bfloat16']. Enables mixed-precision training for fp16/bf16.
+param_dtype: ~ # Parameter dtype.
+autocast: true # Should we autocast to the necessary act_dtype?
+autocast_cache_enabled: null # Should we pass cache_enabled into autocast (sometimes, it breaks DDP)?
+use_autocast_grad_scaler: false # Should we use autocast grad scaler?
+
+loss_scaling: 1.0 # Loss scaling
+sampling: ${sampling} # Sampling config.
+allow_conv3d: true
+label_dropout: 0.1
+always_weight_decay: true # Should we always apply weight decay (when weight_decay > 0, of course)?
+predict_logvar: false
+use_x_cond: false
+reparam_recflow_from_xpred: false # Used for RecFlow-based AE, when it was pre-trained with xpred.
+repeat_img_temporally: 1 # Should we repeat an image temporally to imitate a video?
+compile: false # Should we compile the model via torch.compile?
+use_ema: true # Should we use EMA?
+
+grad_clip:
+  fsdp_clip_all_params: true
+  norm: ~
+  value: ~
+
+freeze_modules_list: [] # A list of modules to freeze during training. They will be converted into buffers.
